@@ -1,5 +1,8 @@
 name: WeasyPrint's tests
-on: [push]
+on:
+  push:
+    branches:
+      - master
 
 jobs:
   tests:
