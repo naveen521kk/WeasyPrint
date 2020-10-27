@@ -61,6 +61,7 @@ def download(url, target_path):
 
 
 def extract_zst(filename, target_dir):
+    print(f"Extracting {filename} to {target_dir}...")
     filename = path.abspath(filename)
     shell(f"zstd -d {filename}", cwd=path.join(filename, os.pardir))
     tar_file = filename[:-4]
@@ -69,6 +70,7 @@ def extract_zst(filename, target_dir):
 
 
 def extract_xz(filename, target_dir):
+    print(f"Extracting {filename} to {target_dir}...")
     filename = path.abspath(filename)
     with tarfile.open(filename, "r:xz") as tb:
         tb.extractall(target_dir)
@@ -107,7 +109,7 @@ if sys.platform == "win32":
             fileUrl = fileUrl.split('"')[1]
             filename = fileUrl.split("/")[-1]
             download(fileUrl, path.join(build_dir, filename))
-            if filename[:-2] == "xz":
+            if filename.endswith("xz"):
                 extract_xz(
                     path.join(build_dir, filename), path.join(build_dir_cairo, package)
                 )
