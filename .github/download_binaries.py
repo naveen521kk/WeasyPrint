@@ -125,5 +125,5 @@ if sys.platform == "win32":
                 shutil.move(i, prefix_dir)
         time.sleep(3)
 
-    get_files("cairo")
+    #get_files("cairo")
     get_files("pango")
