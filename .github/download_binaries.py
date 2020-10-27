@@ -12,6 +12,7 @@ import urllib.request
 from os import path
 
 import certifi
+import time
 
 CAIRO_VERSION = "1.16.0"
 CAIRO_TARBALL = "cairo-1.16.0.tar.xz"
@@ -101,10 +102,10 @@ if sys.platform == "win32":
             if fileUrlSearch:
                 fileUrl = fileUrlSearch.group(0)
             else:
-                regexFile = re.compile(
+                regexFile_xz = re.compile(
                     r'"https:\/\/repo\.msys2\.org\/mingw\/.*\.tar\.xz"'
                 )
-                fileUrlSearch = regexFile.search(res)
+                fileUrlSearch = regexFile_xz.search(res)
                 fileUrl = fileUrlSearch.group(0)
             fileUrl = fileUrl.split('"')[1]
             filename = fileUrl.split("/")[-1]
@@ -122,6 +123,7 @@ if sys.platform == "win32":
             )
             for i in file_dir:
                 shutil.move(i, prefix_dir)
+        time.sleep(3)
 
     get_files("cairo")
     get_files("pango")
