@@ -1,5 +1,6 @@
-name: WeasyPrint's tests
-on: [push]
+name: Build Test
+on:
+    push:
 
 jobs:
     tests:
