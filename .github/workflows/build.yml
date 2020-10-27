@@ -22,6 +22,7 @@ jobs:
       - name: Build
         run: |
           cp .github/download_binaries.py download_binaries.py
+          pip install certifi
           python download_binaries.py 64
           tree /F /A build
       - name: Build
