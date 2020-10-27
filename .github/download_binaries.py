@@ -68,6 +68,12 @@ def extract_zst(filename, target_dir):
         tb.extractall(target_dir)
 
 
+def extract_xz(filename, target_dir):
+    filename = path.abspath(filename)
+    with tarfile.open(filename, "r:xz") as tb:
+        tb.extractall(target_dir)
+
+
 if sys.platform == "win32":
     print("Getting Required Dependency From Msys2")
     if BITS == 32:
@@ -88,15 +94,29 @@ if sys.platform == "win32":
 
             with urllib.request.urlopen(url) as response:
                 res = str(response.read())
-            fileUrl = regexFile.search(res).group(0)
+
+            fileUrlSearch = regexFile.search(res)
+            if fileUrlSearch:
+                fileUrl = fileUrlSearch.group(0)
+            else:
+                regexFile = re.compile(
+                    r'"https:\/\/repo\.msys2\.org\/mingw\/.*\.tar\.xz"'
+                )
+                fileUrlSearch = regexFile.search(res)
+                fileUrl = fileUrlSearch.group(0)
             fileUrl = fileUrl.split('"')[1]
             filename = fileUrl.split("/")[-1]
             download(fileUrl, path.join(build_dir, filename))
-            extract_zst(
-                path.join(build_dir, filename), path.join(build_dir_cairo, package)
-            )
+            if filename[:-2] == "xz":
+                extract_xz(
+                    path.join(build_dir, filename), path.join(build_dir_cairo, package)
+                )
+            else:
+                extract_zst(
+                    path.join(build_dir, filename), path.join(build_dir_cairo, package)
+                )
             file_dir = glob.glob(
-                path.join(build_dir_cairo, package, f"mingw{BITS}", "bin","*.dll")
+                path.join(build_dir_cairo, package, f"mingw{BITS}", "bin", "*.dll")
             )
             for i in file_dir:
                 shutil.move(i, prefix_dir)
