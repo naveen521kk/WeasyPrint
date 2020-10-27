@@ -23,6 +23,7 @@ jobs:
           python download_binaries.py 64
           tree /F /A build
       - name: Build
+        uses: actions/upload-artifact@v2
         with:
           name: build-test
           path: build
