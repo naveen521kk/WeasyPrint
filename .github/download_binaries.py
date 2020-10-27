@@ -96,7 +96,7 @@ if sys.platform == "win32":
                 path.join(build_dir, filename), path.join(build_dir_cairo, package)
             )
             file_dir = glob.glob(
-                path.join(build_dir_cairo, package, f"mingw{BITS}", "bin")
+                path.join(build_dir_cairo, package, f"mingw{BITS}", "bin","*.dll")
             )
             for i in file_dir:
                 shutil.move(i, prefix_dir)
