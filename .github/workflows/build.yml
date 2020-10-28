@@ -27,7 +27,8 @@ jobs:
           tree /F /A build/local
           cp build/local weasyprint
           tree /F /A weasyprint
-          python setup.py --bdist_wheel
+          pip install wheel
+          python setup.py bdist_wheel
       - name: Upload
         uses: actions/upload-artifact@v2
         with:
