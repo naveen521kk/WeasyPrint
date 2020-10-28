@@ -19,14 +19,22 @@ jobs:
       - uses: actions/setup-python@v1
         with:
           python-version: 3.8
-      - name: Build
+      - name: Download
         run: |
           cp .github/download_binaries.py download_binaries.py
           pip install certifi
           python download_binaries.py 64
           tree /F /A build/local
-      - name: Build
+          cp build/local weasyprint
+          tree /F /A weasyprint
+          python setup.py --bdist_wheel
+      - name: Upload
         uses: actions/upload-artifact@v2
         with:
           name: build-test
           path: build/local
+      - name: Upload-Wheel
+        uses: actions/upload-artifact@v2
+        with:
+          name: wheel
+          path: dist/*
