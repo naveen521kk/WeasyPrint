@@ -7,7 +7,7 @@
 """
 
 import re
-
+import os
 import cairocffi as cairo
 import cffi
 import pyphen
@@ -254,12 +254,21 @@ def dlopen(ffi, *names):
     # Re-raise the exception.
     return ffi.dlopen(names[0])  # pragma: no cover
 
-
-gobject = dlopen(ffi, 'gobject-2.0', 'libgobject-2.0-0', 'libgobject-2.0.so.0',
+try:
+    gobject = ffi.dlopen(os.path.join(os.path.dirname(__file__), 'libgobject-2.0-0.dll'))
+except OSError:
+    gobject = dlopen(ffi, 'gobject-2.0', 'libgobject-2.0-0', 'libgobject-2.0.so.0',
                  'libgobject-2.0.dylib')
-pango = dlopen(ffi, 'pango-1.0', 'libpango-1.0-0', 'libpango-1.0.so.0',
+try:
+    pango = ffi.dlopen(os.path.join(os.path.dirname(__file__), 'libpango-1.0-0.dll'))
+except OSError:
+    pango = dlopen(ffi, 'pango-1.0', 'libpango-1.0-0', 'libpango-1.0.so.0',
                'libpango-1.0.dylib')
-pangocairo = dlopen(ffi, 'pangocairo-1.0', 'libpangocairo-1.0-0',
+
+try:
+    pangocairo = ffi.dlopen(os.path.join(os.path.dirname(__file__), 'libpangocairo-1.0-0.dll'))
+except OSError:
+    pangocairo = dlopen(ffi, 'pangocairo-1.0', 'libpangocairo-1.0-0',
                     'libpangocairo-1.0.so.0', 'libpangocairo-1.0.dylib')
 
 gobject.g_type_init()

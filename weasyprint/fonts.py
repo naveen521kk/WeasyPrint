@@ -45,10 +45,16 @@ else:
     # with OSError: dlopen() failed to load a library: cairo / cairo-2
     # So let's hope we find the same file as cairo already did ;)
     # Same applies to pangocairo requiring pangoft2
-    fontconfig = dlopen(ffi, 'fontconfig', 'libfontconfig',
+    try:
+        fontconfig = ffi.dlopen(os.path.join(os.path.dirname(__file__), 'libfontconfig-1.dll'))
+    except OSError:
+        fontconfig = dlopen(ffi, 'fontconfig', 'libfontconfig',
                         'libfontconfig-1.dll',
                         'libfontconfig.so.1', 'libfontconfig-1.dylib')
-    pangoft2 = dlopen(ffi, 'pangoft2-1.0', 'libpangoft2-1.0-0',
+    try:
+        pangoft2=ffi.dlopen(os.path.join(os.path.dirname(__file__), 'libpangoft2-1.0-0.dll'))
+    except OSError:
+        pangoft2 = dlopen(ffi, 'pangoft2-1.0', 'libpangoft2-1.0-0',
                       'libpangoft2-1.0.so.0', 'libpangoft2-1.0.dylib')
 
     ffi.cdef('''
